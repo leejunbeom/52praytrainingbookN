@@ -30,7 +30,7 @@
 					setInterval("autoScroll("+numPX+")", intervalNum);
 					toggle = false;
 				} 
-				
+				/*
 				if(stepNum < 5){
 					stepNum = stepNum + 1;
 					stepPlusNum = numPX * stepNum;
@@ -42,6 +42,7 @@
 					setInterval("autoScroll("+stepPlusNum+")", intervalNum);
 					toggle = false;
 				}
+				*/
 			}
 			
 			function autoScroll(numPX) {
@@ -77,7 +78,7 @@
                 <a class="navbar-brand" href="#page-top">홈</a>
 				<a class="navbar-brand" href="#" onClick="location.href='index_big.html'">기도훈련집(큰글씨)</a>
 				<a class="navbar-brand" href="#indexlist">목차</a>
-				<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(10,100)"	>자동내리기</a>
+				<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(10,10)"	>자동내리기</a>
 				<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,1000)"	>멈춤</a>
 
 				</div>
@@ -207,18 +208,7 @@
         </section>
 		<!-- Content section 0-->
         <section id="ScrollMemo">
-			<p>
-				<h2 class="display-4">0. 자동 스크롤 환경설정</h2>
-				<br>* '보기' 버튼을 누르면 화면이 자동으로 내려갑니다.
-				<br>단계는 2개 입니다. 3줄씩 보기, 6줄씩 보기
-				<br>해제하고 싶으신 경우 '멈춤' 버튼을 누릅니다.
-				<br>4초마다 움직입니다.
-			</p>
 
-			<br><a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(20,1)"	>3줄씩 보기</a>
-			<br><a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(15,10)"	>6줄씩 보기</a>
-			<br><a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤</a>
-			<br><br><br><br><br><br>
 		</section>
 		<!-- Content section 1-->
         <section id="Homeland">
