@@ -17,7 +17,7 @@
 		<!-- javascript source temp -->
 		<script>
 			var toggle = true;
-			var stepNum = 0; // 속도조절 단계
+			var stepNum = 1; // 속도조절 단계
 			var stepPlusNum = 0; // 속도조절 단계
 			/*
 			var scrollTime = 2000; // 스크롤 움직이는 시간, 단위는 1000에 1초, 클수록 느리게 움직임
@@ -30,19 +30,19 @@
 					setInterval("autoScroll("+numPX+")", intervalNum);
 					toggle = false;
 				} 
-				/*
+				
 				if(stepNum < 5){
 					stepNum = stepNum + 1;
 					stepPlusNum = numPX * stepNum;
 					setInterval("autoScroll("+stepPlusNum+")", intervalNum);
 					toggle = false;
 				} else if (stepNum => 5) {
-					stepNum = 0;
+					stepNum = 1;
 					stepPlusNum = numPX * stepNum;
 					setInterval("autoScroll("+stepPlusNum+")", intervalNum);
 					toggle = false;
 				}
-				*/
+				
 			}
 			
 			function autoScroll(numPX) {
@@ -78,7 +78,7 @@
                 <a class="navbar-brand" href="#page-top">홈</a>
 				<a class="navbar-brand" href="#" onClick="location.href='index_big.html'">기도훈련집(큰글씨)</a>
 				<a class="navbar-brand" href="#indexlist">목차</a>
-				<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(10,10)"	>자동내리기</a>
+				<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(10,1)"	>자동내리기</a>
 				<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,1000)"	>멈춤</a>
 
 				</div>
