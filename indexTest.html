@@ -49,8 +49,13 @@
 			}
 			
 			function stopScroll(numPX) {
-				window.scrollBy(0,0);
+				var winY = window.pageYOffset;
+				var interval = setInterval("autoScroll("+0+")", 0);
+				clearInterval(interval);
+				window.scrollTo(0, winY);
+				location.href = location.href;
 				window.location.reload(); // 현재위치 새로고침
+				window.scrollTo(0, winY);
 				toggle = true;
 				stepNum = 0;
 			}
