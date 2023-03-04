@@ -44,17 +44,17 @@
 				
 				if(countBtn == 0) {
 					console.log("=======countBtn : 0여서 그냥리턴함");
-					return 0;
+					return 0; // 리턴타입을,,, 맞춰야하나?
+				} else {
+					let id = setInterval(function() {
+						window.scrollBy(0, level);
+						if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+							// end of page?
+							stopScroll1();
+						}
+					}, interval);
+					return id;
 				}
-				
-				let id = setInterval(function() {
-					window.scrollBy(0, level);
-					if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-						// end of page?
-						stopScroll1();
-					}
-				}, interval);
-				return id;
 			}
 			
 			function stopScroll1() {
@@ -162,7 +162,7 @@
 				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(150,3000)"	>6줄</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(0)"	>멈춤</a>
 				<br><br>
-				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,50)"	>자동내리기</a>
+				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,30)"	>자동내리기</a>
 				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(false,5)"	>머엄춤</a>
 
 				</div>
