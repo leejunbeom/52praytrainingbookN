@@ -6,7 +6,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>52 기도훈련집</title>
-        <link rel="icon" type="image/x-icon" href="assets/imgico.ico" />
+
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -16,14 +16,14 @@
         <link href="css/styles.css" rel="stylesheet" />
 		<!-- javascript source temp -->
 		<script>
-						let scrollerID; 	// 자동 스크롤 담는 변수, 멈춤시 clearInterval 대상이 됨
+			let scrollerID; 	// 자동 스크롤 담는 변수, 멈춤시 clearInterval 대상이 됨
 			let level = 1;		// 속도레벨 1 ~ 6까지 있음
 			
 			let countBtn = 0; 	// 버튼 누른 횟수 카운트
 			let maxCountBtn = 5;// 버튼을 누를 수 있는 최대 수
 			
 			// 버튼 투르면 오토스크롤 동작
-			function startScroll1(speed, interval){
+			function startScroll1(interval){
 				// 버튼 단계
 				if(countBtn < maxCountBtn) {
 					countBtn = countBtn + 1;
@@ -50,13 +50,13 @@
 				clearInterval(scrollerID);
 			}
 			
-			function clickBtn(speed, interval) {
+			function clickBtn(isAuto, interval) {
 				
 				console.log("=======clickBtn : 진입");
-				if(speed == 0) { // 속도 0이면 자동 스크롤 해제
+				if(isAuto == false) { // 속도 0이면 자동 스크롤 해제
 					clearInterval(scrollerID);
 				} else {
-					scrollerID = startScroll1(speed, interval);
+					scrollerID = startScroll1(interval);
 				}
 			}
 			
@@ -68,6 +68,9 @@
 					btnLabel.innerText = cntBtn+'단계';
 				}
 			}
+
+			
+			
 			
 			var toggle = true;
 			var stepNum = 0; // 속도조절 단계
@@ -102,19 +105,20 @@
 			}
 			
 			function stopScroll(numPX) {
+				
 				var winY = window.pageYOffset;
+				window.scrollTo(0, winY);
 				var interval = setInterval("autoScroll("+0+")", 0);
 				clearInterval(interval);
+				location.href = location.href; // 새로고침?
+				clearInterval(interval);
 				window.scrollTo(0, winY);
-				location.href = location.href;
-				window.location.reload(); // 현재위치 새로고침
+				window.location.reload(); // 현재위치 새로고침 한번더?
 				window.scrollTo(0, winY);
+				
 				toggle = true;
 				stepNum = 0;
 			}
-			
-			
-
 			
 		</script>
 		<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -135,12 +139,13 @@
                 <a class="navbar-brand" href="#page-top">홈</a>
 				<a class="navbar-brand" href="#" onClick="location.href='index_big.html'">기도훈련집(큰글씨)</a>
 				<a class="navbar-brand" href="#indexlist">목차</a>
-			
-				<br><a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(80,3000)"	>3줄</a>
+				
+				<br>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(80,3000)">3줄</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(150,3000)"	>6줄</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(0)"	>멈춤</a>
 				<br><br>
-				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(10,10)">자동내리기</a>
+				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,5)"	>자동내리기</a>
 
 				</div>
         </nav>
@@ -155,14 +160,7 @@
                     <!--
 					<a class="btn btn-primary btn-xl rounded-pill mt-5" href="#Homeland">기도훈련 시작!</a>
 					-->
-					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/PrayersForSeniors_big.html'" >기도훈련집(노년부) 이동	</a>
-					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/SpiritPrayer.html'" 		>성령충만 기도문 이동	</a>
-					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/LordsPrayer_new.html'" 	>주기도문 이동		</a>
-					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/book.html'" 				>양육교재 이동		</a>
-					
-					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/SMP72.html'" 			>72차 특별 새벽기도문 이동	</a>
-					
-					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/WishPrayer.html'" 			>소원기도문 이동	</a>
+
 					<!--
 					<a class="btn btn-primary btn-xl rounded-pill mt-3" href="#" onClick="location.href='doc_prayliast/FriendsPrayer.html'" 			>짝궁기도문 이동	type="application/vnd.android.package-archive"</a>
 					-->
@@ -179,22 +177,7 @@
 						<br><a color:yellow href="assets/file/app.zip" target="_blank">기도훈련집(앱버전) 다운로드(18.99MB)</a>
 						<br>//===============================
 						-->
-						<br>//===============================
-						<br>//새벽기도 음악 mp3(1시간)
-						<br>//* 기훈집 하실때 배경음악으로 사용하세요.
-						<br>//===============================
-						<br><audio src="record/praySong.mp3" controls="controls" controlsList="nodownload"></audio>
-						<br>//===============================
-						<br>//기도훈련집 AI 목소리 mp3(1시간 48분)
-						<br>//* <a href="http://www.xn--ok0bv9hm4dy6wd0o.site/book/68">출처 : 오병이어 교회 기도훈련집 바로가기</a>
-						<br>//===============================
-						<br><audio src="record/praytraining_AI_voice_26.mp3" controls="controls" controlsList="nodownload"></audio>
-						<br>//===============================
-						<br>//기도훈련집 AI 목소리 2배빠르기 mp3(1시간 10분)
-						<br>//* <a href="http://www.xn--ok0bv9hm4dy6wd0o.site/book/69">출처 : 오병이어 교회 기도훈련집 2배 바로가기</a>
-						<br>//===============================
-						<br><audio src="record/praytraining_AI_voice2_18.mp3" controls="controls" controlsList="nodownload"></audio>
-						<br>//===============================
+
 					</p>
 					
                 </div>
