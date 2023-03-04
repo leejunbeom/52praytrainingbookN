@@ -31,17 +31,17 @@
 					countBtn = 0;
 				}
 				// 레벨 증가
-				level = countBtn * interval;
+				level = countBtn * 10;
 				// 버튼 텍스트 교제
 				changeBtnLabel(countBtn);
 				
 				let id = setInterval(function() {
-					window.scrollBy(0, countBtn);
+					window.scrollBy(0, level);
 					if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 						// end of page?
 						stopScroll1();
 					}
-				}, level);
+				}, interval);
 				return id;
 			}
 			
@@ -53,7 +53,8 @@
 			function clickBtn(isAuto, interval) {
 				
 				console.log("=======clickBtn : 진입");
-				if(isAuto == false) { // 속도 0이면 자동 스크롤 해제
+				if(isAuto == false ) { // 속도 0이면 자동 스크롤 해제
+					console.log("=======clearInterval 여기 지나가나? : 진입");
 					clearInterval(scrollerID);
 				} else {
 					scrollerID = startScroll1(interval);
@@ -145,7 +146,8 @@
 				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(150,3000)"	>6줄</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(0)"	>멈춤</a>
 				<br><br>
-				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,5)"	>자동내리기</a>
+				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,500)"	>자동내리기</a>
+				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(false,5)"	>머엄춤</a>
 
 				</div>
         </nav>
