@@ -16,6 +16,59 @@
         <link href="css/styles.css" rel="stylesheet" />
 		<!-- javascript source temp -->
 		<script>
+						let scrollerID; 	// 자동 스크롤 담는 변수, 멈춤시 clearInterval 대상이 됨
+			let level = 1;		// 속도레벨 1 ~ 6까지 있음
+			
+			let countBtn = 0; 	// 버튼 누른 횟수 카운트
+			let maxCountBtn = 5;// 버튼을 누를 수 있는 최대 수
+			
+			// 버튼 투르면 오토스크롤 동작
+			function startScroll1(speed, interval){
+				// 버튼 단계
+				if(countBtn < maxCountBtn) {
+					countBtn = countBtn + 1;
+				} else {
+					countBtn = 0;
+				}
+				// 레벨 증가
+				level = countBtn * interval;
+				// 버튼 텍스트 교제
+				changeBtnLabel(countBtn);
+				
+				let id = setInterval(function() {
+					window.scrollBy(0, countBtn);
+					if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+						// end of page?
+						stopScroll1();
+					}
+				}, level);
+				return id;
+			}
+			
+			function stopScroll1() {
+				console.log("=======stopScroll1 : 진입");
+				clearInterval(scrollerID);
+			}
+			
+			function clickBtn(speed, interval) {
+				
+				console.log("=======clickBtn : 진입");
+				if(speed == 0) { // 속도 0이면 자동 스크롤 해제
+					clearInterval(scrollerID);
+				} else {
+					scrollerID = startScroll1(speed, interval);
+				}
+			}
+			
+			function changeBtnLabel(cntBtn) {
+				const btnLabel = document.getElementById("btn1") //id가 'btn'인 요소를 반환한다.
+				if(cntBtn == 0) {
+					btnLabel.innerText = '멈춤';
+				} else {
+					btnLabel.innerText = cntBtn+'단계';
+				}
+			}
+			
 			var toggle = true;
 			var stepNum = 0; // 속도조절 단계
 			var stepPlusNum = 0; // 속도조절 단계
@@ -87,8 +140,7 @@
 				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(150,2000)"	>6줄</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(0)"	>멈춤</a>
 				<br><br>
-				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(7,70)"	>자동내리기</a>
-				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(10,1000)"	>멈춤</a>				
+				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(10,10)">자동내리기</a>
 
 				</div>
         </nav>
