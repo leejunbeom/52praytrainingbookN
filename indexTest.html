@@ -25,10 +25,17 @@
 			// 버튼 투르면 오토스크롤 동작
 			function startScroll1(interval){
 				// 버튼 단계
+				
+				// 이전에 생성된 scrollerID가 있으면 해제 후 재생성
+				if(scrollerID) {
+					clearInterval(scrollerID);
+				}
+				
 				if(countBtn < maxCountBtn) {
 					countBtn = countBtn + 1;
 				} else {
 					countBtn = 0;
+					
 				}
 				// 레벨 증가
 				level = countBtn * 5;
