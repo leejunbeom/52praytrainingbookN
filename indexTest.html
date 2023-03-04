@@ -28,6 +28,7 @@
 				
 				// 이전에 생성된 scrollerID가 있으면 해제 후 재생성
 				if(scrollerID) {
+					console.log("=======scrollerID : 초기화");
 					clearInterval(scrollerID);
 				}
 				
@@ -35,12 +36,16 @@
 					countBtn = countBtn + 1;
 				} else {
 					countBtn = 0;
-					
 				}
 				// 레벨 증가
-				level = countBtn * 5;
+				level = countBtn * 2;
 				// 버튼 텍스트 교제
 				changeBtnLabel(countBtn);
+				
+				if(countBtn == 0) {
+					console.log("=======countBtn : 0여서 그냥리턴함");
+					return 0;
+				}
 				
 				let id = setInterval(function() {
 					window.scrollBy(0, level);
@@ -65,6 +70,10 @@
 					clearInterval(scrollerID);
 				} else {
 					scrollerID = startScroll1(interval);
+					if(countBtn > maxCountBtn) {
+						console.log("=======scrollerID : 5단계 이후 초기화");
+						clearInterval(scrollerID);
+					}
 				}
 			}
 			
@@ -153,7 +162,7 @@
 				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(150,3000)"	>6줄</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(0)"	>멈춤</a>
 				<br><br>
-				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,100)"	>자동내리기</a>
+				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,50)"	>자동내리기</a>
 				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(false,5)"	>머엄춤</a>
 
 				</div>
