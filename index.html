@@ -15,6 +15,17 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
 		<!-- javascript source temp -->
+		<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script>
+			$('document').ready(function(){
+				// 로컬스토리지에 북마크에 저장된 값을 가져오기
+				var getpBookmark = localStorage.getItem('pBookmark');
+				// 북마크로 저장된 값이 있으면, 해당 위치로 이동하기
+				if(getpBookmark) {
+					window.scrollTo(0, getpBookmark);
+				}
+			})
+		</script>
 		<script>
 			var toggle = true;
 			var stepNum = 4; // 속도조절 단계
@@ -27,6 +38,7 @@
 			function startScroll(numPX, intervalNum) {
 				if(toggle){
 					setInterval("autoScroll("+numPX+")", intervalNum);
+					setScrollpBookmark(); // 위치 기록
 					toggle = false;
 				}
 			}
@@ -35,8 +47,13 @@
 				window.scrollBy(0,numPX); // numPX 크기의 픽셀만큼 위로 스크롤
 			}
 			
+			function setScrollpBookmark() {
+				var winY = window.pageYOffset; 	// 보고있는 현재 페이지 좌표 기록
+				localStorage.pBookmark = winY;  // 로컬 스토리지에 저장(이름은 pBookmark 로 저장)		
+			}
+			
 			function stopScroll(numPX) {
-				window.scrollBy(0,numPX);
+				setScrollpBookmark(); // 위치 기록
 				window.location.reload(); // 현재위치 새로고침
 				toggle = true;
 			}
