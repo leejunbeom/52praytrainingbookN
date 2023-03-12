@@ -15,7 +15,25 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
 		<!-- javascript source temp -->
+		<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
+			$('document').ready(function(){
+				console.log("=======(document).ready : 함수진입");
+				// 로컬스토리지에 북마크에 저장된 값을 가져오기
+				var getpBookmark = localStorage.getItem('pBookmark');
+				
+				console.log("=======getpBookmark : "+getpBookmark);
+				// 북마크로 저장된 값이 있으면, 해당 위치로 이동하기
+				if(getpBookmark) {
+					console.log("=======if(getpBookmark) 값이 있을 경우 여기옴 : ");
+					window.scrollTo(0, getpBookmark);
+				}
+			})
+		</script>
+		<script>
+			 
+			
+			
 			let scrollerID; 	// 자동 스크롤 담는 변수, 멈춤시 clearInterval 대상이 됨
 			let level = 1;		// 속도레벨 1 ~ 6까지 있음
 			
@@ -67,45 +85,11 @@
 				}
 			}
 			
-			function stopScroll1() {
-				// 이전에 생성된 scrollerID가 있으면 해제 후 재생성
-				if(scrollerID) {
-					console.log("=======scrollerID : 무조건 초기화");
-					clearInterval(scrollerID);
-				}
-			}
-			
-			function clickBtn(isAuto, interval) {
-				
-				console.log("=======clickBtn : 진입");
-
-				if(isAuto == false ) { // 속도 0이면 자동 스크롤 해제
-					console.log("=======clearInterval 여기 지나가나? : 진입");
-					clearInterval(scrollerID);
-				} else {
-					scrollerID = startScroll1(interval);
-					if(countBtn > maxCountBtn) {
-						console.log("=======scrollerID : 5단계 이후 초기화");
-						clearInterval(scrollerID);
-					}
-				}
-			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			// 속도1을 위한 함수
 			function clickBtn1(viewPixel) {
+				console.log("=======clickBtn1 진입 : ");
 				// 이전에 만든게 있으면 일단 초기화 후 무조건 재셋팅
-				stopScroll2222();
+				stopScroll1();
 				
 				// 스크롤에 파라미터 값(viewPixel) 만큼의 속도로 셋팅
 				scrollerID = setInterval(function() {
@@ -113,15 +97,24 @@
 				}, 10);
 			}
 			
-			// 스크롤 정지
-			function stopScroll2222() {
+			// 스크롤 초기화
+			function stopScroll1() {
+				console.log("=======stopScroll1 진입 : ");
 				var winY = window.pageYOffset; 	// 보고있는 현재 페이지 좌표 기록
+				// 로컬 스토리지에 저장(이름은 pBookmark 로 저장)
+				localStorage.pBookmark = winY;
+				console.log("=======winY 현재위치 : "+winY);
 				if(scrollerID) { 	// 해제 전 스크롤이 동작중인지 체크 후 clear
 					clearInterval(scrollerID);
 				}
-				window.scrollTo(0, winY); 	// 보고 있던 현재 페이지 좌표에
 			}
 			
+			// 스크롤 멈춤 후 새로고침
+			function pageReload() {
+				console.log("=======pageReload 진입 : ");
+				stopScroll1();
+				location.reload(); // 새로고침 - 페이지 리로드하는 경우 로컬스토리지에 저장된 위치로 이동하게 됨
+			}
 			
 			function changeBtnLabel(cntBtn) {
 				const btnLabel = document.getElementById("btn1") //id가 'btn'인 요소를 반환한다.
@@ -132,56 +125,19 @@
 				}
 			}
 
-			
-			
-			
-			var toggle = true;
-			var stepNum = 0; // 속도조절 단계
-			var stepPlusNum = 0; // 속도조절 단계
-			/*
-			var scrollTime = 2000; // 스크롤 움직이는 시간, 단위는 1000에 1초, 클수록 느리게 움직임
-			var lineView1 = 100; // 3줄씩 보기
-			var lineView2 = 200; // 6줄씩 보기
-			*/
-			
-			function startScroll(numPX, intervalNum) {
-				if(toggle){
-					setInterval("autoScroll("+numPX+")", intervalNum);
-					toggle = false;
-				} 
-				
-				if(stepNum < 5){
-					stepNum = stepNum + 1;
-					stepPlusNum = numPX * stepNum;
-					setInterval("autoScroll("+stepPlusNum+")", intervalNum);
-					toggle = false;
-				} else if (stepNum => 5) {
-					stepNum = 0;
-					stepPlusNum = numPX * stepNum;
-					setInterval("autoScroll("+stepPlusNum+")", intervalNum);
-					toggle = false;
-				}
+			//=================================================
+			// 인터벌과 px를 조절할 수 있는 함수(기존함수)
+			//=================================================
+			function autoScroll_detail(numPX, intervalNum) {
+				// 이전에 만든게 있으면 일단 초기화 후 무조건 재셋팅
+				stopScroll1();
+				// 스크롤에 파라미터 값(viewPixel) 만큼의 속도로 셋팅
+				scrollerID = setInterval(function() {
+					window.scrollBy(0, numPX);
+				}, intervalNum);
 			}
 			
-			function autoScroll(numPX) {
-				window.scrollBy(0,numPX); // numPX 크기의 픽셀만큼 위로 스크롤
-			}
 			
-			function stopScroll(numPX) {
-				
-				var winY = window.pageYOffset;
-				window.scrollTo(0, winY);
-				var interval = setInterval("autoScroll("+0+")", 0);
-				clearInterval(interval);
-				location.href = location.href; // 새로고침?
-				clearInterval(interval);
-				window.scrollTo(0, winY);
-				window.location.reload(); // 현재위치 새로고침 한번더?
-				window.scrollTo(0, winY);
-				
-				toggle = true;
-				stepNum = 0;
-			}
 			
 		</script>
 		<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -204,9 +160,9 @@
 				<a class="navbar-brand" href="#indexlist">목차</a>
 				
 				<br>
-				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(80,3000)">3줄</a>
-				<a class="btn btn-primary rounded-pill mt-2" onclick="startScroll(150,3000)">6줄</a>
-				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll(0)"	>멈춤</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="autoScroll_detail(80,3000)">3줄</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="autoScroll_detail(150,3000)">6줄</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="pageReload()"	>멈춤</a>
 				<br><br>
 				<a class="btn btn-primary rounded-pill mt-2" id = "btn1" onclick="clickBtn(true,30)"	>자동내리기</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="clickBtn1(500)"	>속도1</a>
@@ -214,7 +170,9 @@
 				<a class="btn btn-primary rounded-pill mt-2" onclick="clickBtn1(3000)"	>속도3</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="clickBtn1(5000)"	>속도4</a>
 				<a class="btn btn-primary rounded-pill mt-2" onclick="clickBtn1(7000)"	>속도5</a>
-				<a class="btn btn-primary rounded-pill mt-2" onclick="stopScroll2222()"	>멈춤</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="pageReload()"	>멈춤</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="Setting_LocalStorage()"	>쿠키설정</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="Load_LocalStorage()"	>쿠키불러오기</a>
 				</div>
         </nav>
         <!-- Header-->
