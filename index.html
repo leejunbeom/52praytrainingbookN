@@ -27,35 +27,35 @@
 			})
 		</script>
 		<script>
-			var toggle = true;
-			var stepNum = 4; // 속도조절 단계
-			/*
-			var scrollTime = 2000; // 스크롤 움직이는 시간, 단위는 1000에 1초, 클수록 느리게 움직임
-			var lineView1 = 100; // 3줄씩 보기
-			var lineView2 = 200; // 6줄씩 보기
-			*/
+			let scrollerID; 	// 자동 스크롤 담는 변수, 멈춤시 clearInterval 대상이 됨
 			
-			function startScroll(numPX, intervalNum) {
-				if(toggle){
-					setInterval("autoScroll("+numPX+")", intervalNum);
-					setScrollpBookmark(); // 위치 기록
-					toggle = false;
+			//=================================================
+			// 인터벌과 px를 조절할 수 있는 함수(기존함수)
+			//=================================================
+			
+			// 스크롤 셋팅
+			function autoScroll_detail(numPX, intervalNum) {
+				// 이전에 만든게 있으면 일단 초기화 후 무조건 재셋팅
+				stopScroll1();
+				// 스크롤에 파라미터 값(viewPixel) 만큼의 속도로 셋팅
+				scrollerID = setInterval(function() {
+					window.scrollBy(0, numPX);
+				}, intervalNum);
+			}
+			
+			// 스크롤 초기화
+			function stopScroll1() {
+				var winY = window.pageYOffset; 	// 보고있는 현재 페이지 좌표 기록
+				localStorage.pBookmark = winY; // 로컬 스토리지에 저장(이름은 pBookmark 로 저장)
+				if(scrollerID) { 	// 해제 전 스크롤이 동작중인지 체크 후 clear
+					clearInterval(scrollerID);
 				}
 			}
 			
-			function autoScroll(numPX) {
-				window.scrollBy(0,numPX); // numPX 크기의 픽셀만큼 위로 스크롤
-			}
-			
-			function setScrollpBookmark() {
-				var winY = window.pageYOffset; 	// 보고있는 현재 페이지 좌표 기록
-				localStorage.pBookmark = winY;  // 로컬 스토리지에 저장(이름은 pBookmark 로 저장)		
-			}
-			
-			function stopScroll(numPX) {
-				setScrollpBookmark(); // 위치 기록
-				window.location.reload(); // 현재위치 새로고침
-				toggle = true;
+			// 스크롤 멈춤 후 새로고침
+			function pageReload() {
+				stopScroll1();
+				location.reload(); // 새로고침 - 페이지 리로드하는 경우 로컬스토리지에 저장된 위치로 이동하게 됨
 			}
 		</script>
 		<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -76,6 +76,10 @@
                 <a class="navbar-brand" href="#page-top">홈</a>
 				<a class="navbar-brand" href="#" onClick="location.href='index_big.html'">기도훈련집(큰글씨)</a>
 				<a class="navbar-brand" href="#indexlist">목차</a>
+				
+				<a class="btn btn-primary rounded-pill mt-2" onclick="autoScroll_detail(80,4000)">3줄씩 보기</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="autoScroll_detail(150,4000)">6줄씩 보기</a>
+				<a class="btn btn-primary rounded-pill mt-2" onclick="pageReload()"	>멈춤</a>
             </div>
         </nav>
         <!-- Header-->
@@ -199,21 +203,6 @@
                 </div>        
             </div>
         </section>
-		<!-- Content section 0-->
-        <section id="ScrollMemo">
-			<p>
-				<h2 class="display-4">0. 자동 스크롤 환경설정</h2>
-				<br>* '보기' 버튼을 누르면 화면이 자동으로 내려갑니다.
-				<br>단계는 2개 입니다. 3줄씩 보기, 6줄씩 보기
-				<br>해제하고 싶으신 경우 '멈춤' 버튼을 누릅니다.
-				<br>4초마다 움직입니다.
-			</p>
-
-			<br><a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩 보기</a>
-			<br><a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩 보기</a>
-			<br><a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤</a>
-			<br><br><br><br><br><br>
-		</section>
 		<!-- Content section 1-->
         <section id="Homeland">
             <div class="container px-1">
@@ -292,12 +281,6 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
 		
 		<!-- Content section 2-->
 		<section id="Church">
@@ -379,12 +362,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
         <!-- Content section 3-->
         <section id="SeniorPastor">
@@ -464,12 +442,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
         <!-- Content section 4-->
         <section id="CellgroupnMember">
@@ -555,12 +528,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 5-->
         <section id="ConceivedBeliever">
@@ -639,12 +607,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 6-->
         <section id="Faculties">
@@ -734,12 +697,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 7-->
         <section id="Home">
@@ -823,12 +781,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 8-->
         <section id="Husband">
@@ -919,12 +872,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 9-->
         <section id="Wife">
@@ -1015,12 +963,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 10-->
         <section id="﻿Parents">
@@ -1107,12 +1050,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 11-->
         <section id="Children">
@@ -1199,12 +1137,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 12-->
         <section id="Personal1">
@@ -1300,12 +1233,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 13-->
         <section id="Personal2">
@@ -1428,12 +1356,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 14-->
         <section id="Repentance">
@@ -1550,12 +1473,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 15-->
         <section id="SpiritualPower">
@@ -1625,12 +1543,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 16-->
         <section id="Temptations">
@@ -1700,12 +1613,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 17-->
         <section id="Tarry">
@@ -1773,12 +1681,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 18-->
         <section id="﻿Tired">
@@ -1845,12 +1748,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 19-->
         <section id="﻿Thanks">
@@ -1915,12 +1813,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 20-->
         <section id="Healing">
@@ -1996,12 +1889,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 21-->
         <section id="Spouse">
@@ -2075,12 +1963,7 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
+
 		
 		<!-- Content section 22-->
         <section id="Money">
@@ -2149,12 +2032,6 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
 		
 		<!-- Content section 23-->
         <section id="Business">
@@ -2242,12 +2119,6 @@
             </div>
         </section>
 		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
-		
 		<!-- Content section 24-->
         <section id="﻿Dawn">
             <div class="container px-1">
@@ -2315,12 +2186,6 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
 		
 		<!-- Content section 25-->
         <section id="﻿Night">
@@ -2391,12 +2256,6 @@
             </div>
         </section>
 		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
-		
 		<!-- Content section 26-->
         <section id="﻿Devil">
             <div class="container px-1">
@@ -2465,12 +2324,6 @@
                 </div>        
             </div>
         </section>
-		
-		<p>4초마다 움직임</p>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(100,4000)"	>3줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="startScroll(200,4000)"	>6줄씩	</a>
-		<a class="btn btn-primary btn-xl rounded-pill mt-2" onclick="stopScroll(10,2000)"	>멈춤		</a><br>
-		<br><br>
 		
 		<!-- Content section 27-->
         <section id="﻿Disease">
