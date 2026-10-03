@@ -360,13 +360,38 @@ body.theme-dark .current-prayer-part {
 .hero-subtitle {
   font-size: 12px;
   color: #94a3b8;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-.hero-actions {
+/* 새벽기도 배경음악 & 자동 스크롤 컨트롤 박스 */
+.music-player-box {
+  margin-top: 14px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: left;
+}
+
+.music-player-header {
   display: flex;
-  justify-content: center;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #fbbf24;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.music-audio-el {
+  width: 100%;
+  height: 36px;
+  opacity: 0.95;
+  outline: none;
+  border-radius: 8px;
 }
 
 .part-header {
@@ -1003,6 +1028,24 @@ body.theme-dark .btn-complete {
             <span class="hero-badge">52 기도훈련 시리즈</span>
             <h1 class="hero-title">기도훈련집 (청소년)</h1>
             <p class="hero-subtitle">Training Book for Powerful Prayer</p>
+
+            <!-- 새벽기도 배경음악 -->
+            <div class="music-player-box">
+                <div class="music-player-header">
+                    <span style="display: flex; align-items: center; gap: 4px;">
+                        🎵 새벽기도 배경음악
+                    </span>
+                    <span style="color: #94a3b8; font-weight: normal; font-size: 10px;">1시간 연속재생</span>
+                </div>
+                <audio
+                    src="../record/praySong.mp3"
+                    controls="controls"
+                    controlsList="nodownload"
+                    preload="metadata"
+                    class="music-audio-el"
+                    title="새벽기도 배경음악"
+                ></audio>
+            </div>
         </div>
 
         
@@ -3316,6 +3359,42 @@ body.theme-dark .btn-complete {
         }
 
         // 자동 스크롤 엔진
+        function updateHeroScrollUi() {
+            var btn = document.getElementById('heroAutoScrollBtn');
+            var isRunning = (autoScrollTimer !== null);
+            if (btn) {
+                if (isRunning) {
+                    btn.innerHTML = '⏹ 정지';
+                    btn.classList.add('active');
+                } else {
+                    btn.innerHTML = '▶ 시작';
+                    btn.classList.remove('active');
+                }
+            }
+            var spd = document.getElementById('heroScrollSpeedDisplay');
+            if (spd) spd.innerText = scrollSpeed;
+        }
+
+        function toggleHeroAutoScroll() {
+            if (autoScrollTimer !== null) {
+                stopAutoScroll();
+            } else {
+                startAutoScroll();
+            }
+        }
+
+        function changeHeroScrollSpeed(delta) {
+            scrollSpeed = Math.max(1, Math.min(5, scrollSpeed + delta));
+            draftScrollSpeed = scrollSpeed;
+            try { localStorage.setItem('pScrollSpeed', scrollSpeed); } catch(e) {}
+            var spdDisp = document.getElementById('scrollSpeedDisplay');
+            if (spdDisp) spdDisp.innerText = scrollSpeed;
+            updateHeroScrollUi();
+            if (autoScrollTimer !== null) {
+                startAutoScroll();
+            }
+        }
+
         function startAutoScroll() {
             stopAutoScroll();
             var badge = document.getElementById('autoScrollBadge');
@@ -3324,6 +3403,7 @@ body.theme-dark .btn-complete {
             autoScrollTimer = setInterval(function() {
                 window.scrollBy({ top: scrollSpeed * 2, behavior: 'smooth' });
             }, 60);
+            updateHeroScrollUi();
         }
 
         function stopAutoScroll() {
@@ -3333,6 +3413,7 @@ body.theme-dark .btn-complete {
             }
             var badge = document.getElementById('autoScrollBadge');
             if (badge) badge.classList.remove('show');
+            updateHeroScrollUi();
         }
 
         // 설정 창 열기 (현재 설정값을 임시 상태로 복사)
@@ -3454,6 +3535,13 @@ body.theme-dark .btn-complete {
 
                 var savedLh = localStorage.getItem('pLineHeight');
                 if (savedLh) applyLineHeight(parseFloat(savedLh));
+
+                var savedSpeed = localStorage.getItem('pScrollSpeed');
+                if (savedSpeed) {
+                    scrollSpeed = parseInt(savedSpeed, 10);
+                    draftScrollSpeed = scrollSpeed;
+                }
+                updateHeroScrollUi();
 
                 // 이전 읽던 기록이 있으면 이어 읽기 배너 표시
                 var lastId = localStorage.getItem('pLastReadId');
